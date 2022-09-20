@@ -2,9 +2,10 @@ let pSubtitulo = document.querySelector("#pSubtitulo");
 let btnAgregar = document.querySelector("#btnAgregar");
 let btnDuracion = document.querySelector("#btnDuracion");
 
-pSubtitulo.innerHTML="Ejemplo CR con arreglo de objetos en JS";
+pSubtitulo.innerHTML="Ejemplo CR con load inicial de mock en JSON del arreglo de objetos en JS";
 
 let pistas = [];
+load()
 
 btnAgregar.addEventListener("click", () => {
     console.log("Función Agregar");
@@ -55,4 +56,15 @@ function mostrarPistas() {
         `; 
     }
     document.querySelector("#tblPistas").innerHTML = html;
+}
+
+async function load() {
+    let respuesta = await fetch('./pistasMock.json');
+    if (respuesta.ok) {
+        let datos = await respuesta.json();
+        pistas = datos.pistas;
+    } else {
+        pistas = [];
+    }
+    mostrarPistas();
 }
