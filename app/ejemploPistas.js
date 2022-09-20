@@ -5,6 +5,7 @@ let btnDuracion = document.querySelector("#btnDuracion");
 pSubtitulo.innerHTML="Ejemplo CR con arreglo de objetos en JS";
 
 let pistas = [];
+load();
 
 btnAgregar.addEventListener("click", () => {
     console.log("Función Agregar");
@@ -55,4 +56,12 @@ function mostrarPistas() {
         `; 
     }
     document.querySelector("#tblPistas").innerHTML = html;
+}
+
+async function load() {
+    let respuesta = await fetch('/pista');
+    if (respuesta.ok) {
+        pistas = await respuesta.json();
+        mostrarPistas()
+    }
 }
