@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { PistaService } from './pista.service';
 import Pista from './pista';
 
@@ -14,5 +14,9 @@ export class PistaController {
     @Get(':identificador')
     public getPista(@Param('identificador') identificador : number) : Pista {
         return this.pistaService.getPista(identificador);
+    }
+    @Post()
+    public addPista(@Body() pista : any) : string {
+        return this.pistaService.addPista(pista);
     }
 }

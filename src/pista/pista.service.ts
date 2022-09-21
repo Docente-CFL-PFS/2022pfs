@@ -19,6 +19,18 @@ export class PistaService {
                 return this.listaPistas[i];
         }
     }
+    public addPista(pistaNueva: any) : string {
+        let pista = new Pista(pistaNueva.identificador,pistaNueva.titulo,pistaNueva.duracion,pistaNueva.interprete);
+        if (pista.getIdentificador() && pista.getTitulo() && pista.getDuracion() && pista.getInterprete()) {
+            //agregar en estructura de memoria
+            this.listaPistas.push(pista);
+            this.savePistas();
+            this.loadPistas();
+            return "ok";
+        }
+        else
+            return "parametros incorrectos";
+    }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private loadPistas() {
         let pista : Pista;
@@ -32,5 +44,14 @@ export class PistaService {
                 this.listaPistas.push(pista);
             }
         }        
+    }
+    private savePistas() {
+        FS.writeFileSync('C:\\Cursos\\CFL\\4-BE\\2022pfs\\src\\pista\\pistasMock.txt','');
+        for (let i = 0; i < this.listaPistas.length; i++) {
+            let pista = this.listaPistas[i];
+            FS.appendFileSync('C:\\Cursos\\CFL\\4-BE\\2022pfs\\src\\pista\\pistasMock.txt',
+                `${i==0?'':'\n'}${pista.getIdentificador()},${pista.getTitulo()},${pista.getDuracion()},${pista.getInterprete()}`
+                             );
+        }
     }
 }

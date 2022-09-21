@@ -20,12 +20,14 @@ btnAgregar.addEventListener("click", () => {
         "duracion": duracion,
         "interprete": interprete,
     };
-    pistas.push(renglon);
+    if (aServidor(renglon,'A')) {
+        pistas.push(renglon);
+        mostrarPistas();
+    }
     document.querySelector('#identificador').value="";
     document.querySelector('#titulo').value="";
     document.querySelector('#duracion').value="";
     document.querySelector('#interprete').value="";
-    mostrarPistas();
 });
 btnBuscar.addEventListener("click", () => {
     console.log("Función Buscar");
@@ -82,4 +84,17 @@ async function load(identificador) {
             pistas = await respuesta.json();
     }
     mostrarPistas()
+}
+async function aServidor(datos, accion) {
+    let respuesta;
+    switch (accion) {
+        case 'A': {     //ALTA
+            respuesta = await fetch('/pista', {
+                method :'POST',
+                headers: { 'Content-Type' : 'application/json' },
+                body : JSON.stringify(datos)
+            });
+        } 
+    }
+    return (respuesta.ok == "ok");
 }
