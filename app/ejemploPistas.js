@@ -1,8 +1,9 @@
 let pSubtitulo = document.querySelector("#pSubtitulo");
 let btnAgregar = document.querySelector("#btnAgregar");
+let btnBuscar = document.querySelector("#btnBuscar");
 let btnDuracion = document.querySelector("#btnDuracion");
 
-pSubtitulo.innerHTML="Ejemplo CR con arreglo de objetos en JS";
+pSubtitulo.innerHTML="Ejemplo CR con arreglo de objetos en JS - Busqueda de una pista por identificador";
 
 let pistas = [];
 load();
@@ -26,6 +27,14 @@ btnAgregar.addEventListener("click", () => {
     document.querySelector('#interprete').value="";
     mostrarPistas();
 });
+btnBuscar.addEventListener("click", () => {
+    console.log("Función Buscar");
+    let identificador = parseInt(document.querySelector('#identificador').value);
+    if (identificador) {
+        load(identificador);
+    }
+    document.querySelector('#identificador').value="";
+})
 btnDuracion.addEventListener("click", () => {
     console.log("Función Duración");
     let total = 0;
@@ -58,10 +67,19 @@ function mostrarPistas() {
     document.querySelector("#tblPistas").innerHTML = html;
 }
 
-async function load() {
-    let respuesta = await fetch('/pista');
+async function load(identificador) {
+    pistas = [];
+    let url = "";
+    if (identificador) 
+        url = `/pista/${identificador}`;
+    else
+        url = '/pista';
+    let respuesta = await fetch(url);
     if (respuesta.ok) {
-        pistas = await respuesta.json();
-        mostrarPistas()
+        if (identificador) 
+            pistas.push(await respuesta.json());
+        else
+            pistas = await respuesta.json();
     }
+    mostrarPistas()
 }
