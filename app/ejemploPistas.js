@@ -3,7 +3,8 @@ let btnAgregar = document.querySelector("#btnAgregar");
 let btnBuscar = document.querySelector("#btnBuscar");
 let btnDuracion = document.querySelector("#btnDuracion");
 
-pSubtitulo.innerHTML="Ejemplo CR con arreglo de objetos en JS - Busqueda de una pista por identificador";
+pSubtitulo.innerHTML="Ejemplo CR con arreglo de objetos en JS - Busqueda por todos y uno y Alta";
+
 
 let pistas = [];
 load();
