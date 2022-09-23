@@ -2,7 +2,7 @@ let pSubtitulo = document.querySelector("#pSubtitulo");
 let btnAgregar = document.querySelector("#btnAgregar");
 let btnDuracion = document.querySelector("#btnDuracion");
 
-pSubtitulo.innerHTML="Ejemplo CR con arreglo de objetos en JS";
+pSubtitulo.innerHTML="Ejemplo CR con arreglo de objetos en JS - agregado de año";
 
 let pistas = [];
 load();
@@ -13,17 +13,20 @@ btnAgregar.addEventListener("click", () => {
     let titulo = document.querySelector('#titulo').value;
     let duracion = parseInt(document.querySelector('#duracion').value);
     let interprete = document.querySelector('#interprete').value;
+    let año = document.querySelector('#año').value;
     let renglon = {
         "identificador": identificador,
         "titulo": titulo,
         "duracion": duracion,
         "interprete": interprete,
+        "año": año,
     };
     pistas.push(renglon);
     document.querySelector('#identificador').value="";
     document.querySelector('#titulo').value="";
     document.querySelector('#duracion').value="";
     document.querySelector('#interprete').value="";
+    document.querySelector('#año').value="";
     mostrarPistas();
 });
 btnDuracion.addEventListener("click", () => {
@@ -52,6 +55,8 @@ function mostrarPistas() {
             <td>${r.titulo}</td>
             <td>${r.duracion}</td>
             <td>${r.interprete}</td>
+            <td>${r.año}</td>
+            <td></td>
             </tr>
         `; 
     }
