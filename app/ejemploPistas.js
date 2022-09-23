@@ -61,6 +61,7 @@ function mostrarPistas() {
             <td>${r.titulo}</td>
             <td>${r.duracion}</td>
             <td>${r.interprete}</td>
+            <td></td>
             </tr>
         `; 
     }
