@@ -22,7 +22,7 @@ export class PistaService {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private loadPistas() {
         let pista : Pista;
-        let texto : string = FS.readFileSync('C:\\Cursos\\CFL\\4-BE\\2022pfs\\src\\pista\\pistasMock.txt', 'utf8');
+        let texto : string = FS.readFileSync('.\\datos\\pistasMock.txt', 'utf8');
         if (texto) {
             this.listaPistas = [];
             let registros = texto.split('\n');
