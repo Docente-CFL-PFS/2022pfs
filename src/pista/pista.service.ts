@@ -34,7 +34,8 @@ export class PistaService {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private loadPistas() {
         let pista : Pista;
-        let texto : string = FS.readFileSync('C:\\Cursos\\CFL\\4-BE\\2022pfs\\src\\pista\\pistasMock.txt', 'utf8');
+        // let texto : string = FS.readFileSync('C:\\Cursos\\CFL\\4-BE\\2022pfs\\src\\pista\\pistasMock.txt', 'utf8');
+        let texto : string = FS.readFileSync('.\\datos\\pistasMock.txt', 'utf8');
         if (texto) {
             this.listaPistas = [];
             let registros = texto.split('\n');
@@ -46,10 +47,12 @@ export class PistaService {
         }        
     }
     private savePistas() {
-        FS.writeFileSync('C:\\Cursos\\CFL\\4-BE\\2022pfs\\src\\pista\\pistasMock.txt','');
+        // FS.writeFileSync('C:\\Cursos\\CFL\\4-BE\\2022pfs\\src\\pista\\pistasMock.txt','');
+        FS.writeFileSync('.\\datos\\pistasMock.txt','');
         for (let i = 0; i < this.listaPistas.length; i++) {
             let pista = this.listaPistas[i];
-            FS.appendFileSync('C:\\Cursos\\CFL\\4-BE\\2022pfs\\src\\pista\\pistasMock.txt',
+            // FS.appendFileSync('C:\\Cursos\\CFL\\4-BE\\2022pfs\\src\\pista\\pistasMock.txt',
+            FS.appendFileSync('.\\datos\\pistasMock.txt',
                 `${i==0?'':'\n'}${pista.getIdentificador()},${pista.getTitulo()},${pista.getDuracion()},${pista.getInterprete()}`
                              );
         }

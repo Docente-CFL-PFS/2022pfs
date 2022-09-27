@@ -9,7 +9,7 @@ pSubtitulo.innerHTML="Ejemplo CR con arreglo de objetos en JS - Busqueda por tod
 let pistas = [];
 load();
 
-btnAgregar.addEventListener("click", () => {
+btnAgregar.addEventListener("click", async () => {
     console.log("Función Agregar");
     let identificador = parseInt(document.querySelector('#identificador').value);
     let titulo = document.querySelector('#titulo').value;
@@ -21,9 +21,8 @@ btnAgregar.addEventListener("click", () => {
         "duracion": duracion,
         "interprete": interprete,
     };
-    if (aServidor(renglon,'A')) {
-        pistas.push(renglon);
-        mostrarPistas();
+    if (await aServidor(renglon,'A')) {
+        load();
     }
     document.querySelector('#identificador').value="";
     document.querySelector('#titulo').value="";
@@ -98,5 +97,5 @@ async function aServidor(datos, accion) {
             });
         } 
     }
-    return (respuesta.ok == "ok");
+    return ((await respuesta.text()) == "ok");
 }
