@@ -52,6 +52,7 @@ btnDuracion.addEventListener("click", () => {
     <p>Duración Total: ${total}</p>
     <p>Duración Máxima: ${max}</p>
     `;
+    console.log(JSON.stringify(total));
 });
 
 function mostrarPistas() {

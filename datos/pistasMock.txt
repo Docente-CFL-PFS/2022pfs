@@ -8,4 +8,4 @@
 8,Comfortably Numb,280,Pink Floyd
 9,Stairway to Heaven,250,Led Zeppelin
 10,Smoke on the water,220,Deep Purple
-11,One,300,Duran Duran
+11,One,300,U2
