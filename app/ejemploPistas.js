@@ -57,7 +57,7 @@ function mostrarPistas() {
     for (let r of pistas) {
         html += `
             <tr>
-            <td>${r.identificador}</td>
+            <td><a href="ejemploPistaUnica.html?index=${r.identificador}">${r.identificador}</a></td>
             <td>${r.titulo}</td>
             <td>${r.duracion}</td>
             <td>${r.interprete}</td>
