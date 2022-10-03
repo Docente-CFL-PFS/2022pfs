@@ -5,12 +5,14 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PistaController } from './pista/pista.controller';
 import { PistaService } from './pista/pista.service';
+import { VehiculoController } from './vehiculos/vehiculo.controller';
+import { VehiculoService } from './vehiculos/vehiculo.service';
 
 @Module({
   imports: [ 
     ServeStaticModule.forRoot ( { rootPath : join (__dirname,'..','app') } )
   ],
-  controllers: [AppController, PistaController],
-  providers: [AppService, PistaService],
+  controllers: [AppController, PistaController, VehiculoController],
+  providers: [AppService, PistaService, VehiculoService],
 })
 export class AppModule {}
