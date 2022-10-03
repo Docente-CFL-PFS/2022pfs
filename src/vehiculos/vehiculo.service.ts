@@ -22,19 +22,19 @@ export class VehiculoService {
         return null;
     }
     public listarAutos() : Vehiculo[] {
-        let autos : Vehiculo[];
-        this.vehiculos.forEach(vehiculo => {
-            if (vehiculo.getTipo() === 'Auto')
-                autos.push(vehiculo);
-        });
+        let autos : Vehiculo[] = [];
+        for (let i = 0; i < this.vehiculos.length; i++) {
+            if (this.vehiculos[i].getTipo() == 'Auto')
+                autos.push(this.vehiculos[i]);
+        }
         return autos;
     }
     public listarCamionetas() : Vehiculo[] {
-        let camionetas : Vehiculo[];
-        this.vehiculos.forEach(vehiculo => {
-            if (vehiculo.getTipo() === 'Camioneta')
-            camionetas.push(vehiculo);
-        });
+        let camionetas : Vehiculo[] = [];
+        for (let i = 0; i < this.vehiculos.length; i++) {
+            if (this.vehiculos[i].getTipo() == 'Camioneta')
+                camionetas.push(this.vehiculos[i]);
+        }
         return camionetas;
     }
     public agregarVehiculos(datos : any) : string {

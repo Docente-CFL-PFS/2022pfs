@@ -11,10 +11,6 @@ export class VehiculoController {
     public listarVehiculos() : Vehiculo[] {
         return this.vehiculoService.listarTodos();
     }
-    @Get('/:dominio')
-    public listarVehiculo(@Param('dominio') dominio : string) : Vehiculo {
-        return this.vehiculoService.listarVehiculo(dominio);
-    }
     @Get('/autos')
     public listarVehiculosAutos() : Vehiculo[] {
         return this.vehiculoService.listarAutos();
@@ -22,6 +18,10 @@ export class VehiculoController {
     @Get('/camionetas')
     public listarVehiculosCamionetas() : Vehiculo[] {
         return this.vehiculoService.listarCamionetas();
+    }
+    @Get('/:dominio')
+    public listarVehiculo(@Param('dominio') dominio : string) : Vehiculo {
+        return this.vehiculoService.listarVehiculo(dominio);
     }
 
     @Post()

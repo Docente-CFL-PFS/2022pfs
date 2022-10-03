@@ -1,6 +1,8 @@
 let pSubtitulo = document.querySelector("#pSubtitulo");
 let btnAgregar = document.querySelector("#btnAgregar");
 let btnBuscar = document.querySelector("#btnBuscar");
+let btnBuscaA = document.querySelector("#btnBuscaA");
+let btnBuscaC = document.querySelector("#btnBuscaC");
 
 pSubtitulo.innerHTML="Ejemplo Concesionaria";
 
@@ -15,13 +17,23 @@ btnAgregar.addEventListener("click", async () => {
     let año = parseInt(document.querySelector('#año').value);
     let precio = parseInt(document.querySelector('#precio').value);
     let capacidad = parseInt(document.querySelector('#capacidad').value);
+    let tipo = 'Auto';
+    if (capacidad) {
+        tipo = 'Camioneta';    
+    }
     let renglon = {
-        "dominio": dominio,
-        "marca": marca,
-        "modelo": modelo,
-        "año": año,
-        "precio": precio,
-        "capacidad": capacidad
+        "cantidad" : 1,
+        "vehiculos" : [
+            {
+                "tipo" : tipo,
+                "dominio" : dominio,
+                "marca" : marca,
+                "modelo" : modelo,
+                "año" : año,
+                "precio" : precio,
+                "capacidad" : capacidad
+            }
+        ]
     };
     if (await aServidor(renglon,'A')) {
         load();
@@ -40,6 +52,14 @@ btnBuscar.addEventListener("click", () => {
         load(dominio);
     }
     document.querySelector('#dominio').value="";
+})
+btnBuscaA.addEventListener("click", () => {
+    console.log("Función Buscar Autos");
+    load('A')
+})
+btnBuscaC.addEventListener("click", () => {
+    console.log("Función Buscar Camionetas");
+    load('C')
 })
 
 function mostrarVehiculos() {
@@ -63,10 +83,25 @@ function mostrarVehiculos() {
 async function load(dominio) {
     vehiculos = [];
     let url = "";
-    if (dominio) 
-        url = `/vehiculo/${dominio}`;
-    else
-        url = '/vehiculo';
+    switch (dominio) {
+        case 'A': {
+                url = `/vehiculo/autos`;
+                dominio = '';
+                break;
+            }
+        case 'C': {
+                url = `/vehiculo/camionetas`;
+                dominio = '';
+                break;
+            }
+        default: {
+                if (dominio) 
+                    url = `/vehiculo/${dominio}`;
+                else
+                    url = '/vehiculo';            
+                break;
+            }
+    }
     let respuesta = await fetch(url);
     if (respuesta.ok) {
         if (dominio) 
@@ -76,6 +111,7 @@ async function load(dominio) {
     }
     mostrarVehiculos()
 }
+
 async function aServidor(datos, accion) {
     let respuesta;
     switch (accion) {
