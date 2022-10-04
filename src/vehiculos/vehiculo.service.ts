@@ -37,6 +37,14 @@ export class VehiculoService {
         }
         return camionetas;
     }
+    public listarVehiculosTipo(tipo : string) : Vehiculo[] {
+        let vehiculos : Vehiculo[] = [];
+        for (let i = 0; i < this.vehiculos.length; i++) {
+            if (this.vehiculos[i].getTipo() == tipo || tipo.trim() == 'todos')
+            vehiculos.push(this.vehiculos[i]);
+        }
+        return vehiculos;
+    }
     public agregarVehiculos(datos : any) : string {
         try {
             let vehiculo : Vehiculo;
@@ -56,6 +64,49 @@ export class VehiculoService {
             return 'ok';
         } catch (error) {
             return error.message
+        }
+    }
+    public eliminarVehiculo(dominio : string) : string {
+        try {
+            for (let i = 0; i < this.vehiculos.length; i++) {
+                if (this.vehiculos[i].getDominio() == dominio) {
+                    this.vehiculos.splice(i,1);
+                    this.saveVehiculos();
+                    this.loadVehiculos();
+                    return 'ok';        
+                }                
+            }
+            return 'No se encuentra el dominio';
+        } catch (error) {
+            return error.message;
+        }
+    }
+    public modificarVehiculos(dominio : string, datos : any) : string {
+        try {
+            for (let i = 0; i < this.vehiculos.length; i++) {
+                if (this.vehiculos[i].getDominio() == dominio) {
+                    // ARMAR NUEVO VEHICULO
+                    let vehiculo : Vehiculo;
+                    let cantidad = datos.cantidad;
+                    for (let j = 0; j < cantidad; j++) {
+                        let elemento = datos.vehiculos[j];
+                        if (elemento.tipo == 'Auto')
+                            vehiculo = new Auto(elemento.dominio, elemento.precio, elemento.marca, elemento.modelo, elemento.año);
+                        else if (elemento.tipo == 'Camioneta')
+                                vehiculo = new Camioneta(elemento.dominio, elemento.precio, elemento.marca, elemento.modelo, elemento.año, elemento.capacidad);
+                        else
+                            throw new Error('Tipo de vehiculo no valido');
+                    }
+                    // REEMPLAZAR VIEJO POR NUEVO EN ARREGLO DE MEMORIA
+                    this.vehiculos[i] = vehiculo;
+                    this.saveVehiculos();
+                    this.loadVehiculos();
+                    return 'ok';        
+                }                
+            }
+            return 'No se encuentra el dominio';
+        } catch (error) {
+            return error.message;
         }
     }
     ///

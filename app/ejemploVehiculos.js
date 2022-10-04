@@ -48,9 +48,10 @@ btnAgregar.addEventListener("click", async () => {
 btnBuscar.addEventListener("click", () => {
     console.log("Función Buscar");
     let dominio = document.querySelector('#dominio').value;
-    if (dominio) {
+    if (dominio) 
         load(dominio);
-    }
+    else
+        load();
     document.querySelector('#dominio').value="";
 })
 btnBuscaA.addEventListener("click", () => {
@@ -68,16 +69,47 @@ function mostrarVehiculos() {
         html += `
             <tr>
             <td><a href="./ejemploVehiculo.html?dominio=${r.dominio}">${r.dominio}</a></td>
-            <td>${r.marca}</td>
-            <td>${r.modelo}</td>
-            <td>${r.año}</td>
-            <td>${r.precio}</td>
-            <td>${(r.capacidad==undefined)?"-":r.capacidad}</td>
-            <td></td>
+            <td><input class="vacio" type="text" name="" value="${r.marca}" id="mar${r.dominio}"></td>
+            <td><input class="vacio" type="text" name="" value="${r.modelo}" id="mod${r.dominio}"></td>
+            <td><input class="vacio" type="text" name="" value="${r.año}" id="año${r.dominio}"></td>
+            <td><input class="vacio" type="text" name="" value="${r.precio}" id="pre${r.dominio}"></td>
+            <td><input class="vacio" type="text" name="" value="${(r.capacidad==undefined)?"-":r.capacidad}" id="cap${r.dominio}"></td>
+            <td><button class="btnDelVehiculo" dominio="${r.dominio}">Borrar</button>
+                <button class="btnUpdVehiculo" dominio="${r.dominio}">Actualizar</button>
+            </td>
             </tr>
         `; 
     }
     document.querySelector("#tblVehiculos").innerHTML = html;
+    let btnBorrar = document.querySelectorAll('.btnDelVehiculo');
+    btnBorrar.forEach(bd => { bd.addEventListener('click', async () => {
+        let dominio = bd.getAttribute('dominio');
+        if (await aServidor(dominio,'D')) {
+            load();
+        }    
+    })})
+    let btnModificar = document.querySelectorAll('.btnUpdVehiculo');
+    btnModificar.forEach(bd => { bd.addEventListener('click', async () => {
+        let dominio = bd.getAttribute('dominio');
+        let renglon = {
+            "cantidad" : 1,
+            "vehiculos" : [
+                {
+                    "tipo" : `${(document.querySelector(`#cap${dominio}`).value=='-')?'Auto':'Camioneta'}`,
+                    "dominio" : dominio,
+                    "marca" : document.querySelector(`#mar${dominio}`).value,
+                    "modelo" : document.querySelector(`#mod${dominio}`).value,
+                    "año" : document.querySelector(`#año${dominio}`).value,
+                    "precio" : document.querySelector(`#pre${dominio}`).value,
+                    "capacidad" : document.querySelector(`#cap${dominio}`).value
+                }
+            ]
+        }
+        console.log(renglon);
+        if (await aServidor(renglon,'U')) {
+            load();
+        }    
+    })})
 }
 
 async function load(dominio) {
@@ -121,7 +153,22 @@ async function aServidor(datos, accion) {
                 headers: { 'Content-Type' : 'application/json' },
                 body : JSON.stringify(datos)
             });
+            break;
         } 
+        case 'D' : {    //ELIMINACION
+            respuesta = await fetch(`/vehiculo/${dominio}`, {
+                method : 'DELETE'
+            });   
+            break;         
+        }
+        case 'U': {     //ACTUALIZACION
+            respuesta = await fetch(`/vehiculo/${datos.vehiculos[0].dominio}`, {
+                method : 'PUT',
+                headers : { 'Content-type' : 'application/json' },
+                body : JSON.stringify(datos)
+            });
+            break;
+        }
     }
     return ((await respuesta.text()) == "ok");
 }
