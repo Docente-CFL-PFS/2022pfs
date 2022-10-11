@@ -13,7 +13,7 @@ export default class Auto extends Vehiculo {
     }
     public guardar(): string {
         let datos : string;
-        datos = `${super.getDominio()},${super.getPrecio().toString()},${super.getMarca()},${super.getModelo()},${super.getAñO().toString()}`;
+        datos = `${super.getDominio()},${super.getPrecio().toString()},${super.getMarca()},${super.getModelo()},${super.getAño().toString()}`;
         return datos;
     }
 }

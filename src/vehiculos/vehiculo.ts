@@ -27,8 +27,8 @@ export default abstract class Vehiculo {
     public getModelo(): string { return this.modelo; }
     public setModelo(modelo: string): void { this.modelo = modelo; }
 
-    public getAñO(): number { return this.año; }
-    public setAñO(año: number): void { this.año = año; }
+    public getAño(): number { return this.año; }
+    public setAño(año: number): void { this.año = año; }
 
     abstract getTipo(): string;
     abstract mostrar(): string;

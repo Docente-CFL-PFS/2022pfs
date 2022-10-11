@@ -68,48 +68,17 @@ function mostrarVehiculos() {
     for (let r of vehiculos) {
         html += `
             <tr>
-            <td><a href="./ejemploVehiculo.html?dominio=${r.dominio}">${r.dominio}</a></td>
-            <td><input class="vacio" type="text" name="" value="${r.marca}" id="mar${r.dominio}"></td>
-            <td><input class="vacio" type="text" name="" value="${r.modelo}" id="mod${r.dominio}"></td>
-            <td><input class="vacio" type="text" name="" value="${r.año}" id="año${r.dominio}"></td>
-            <td><input class="vacio" type="text" name="" value="${r.precio}" id="pre${r.dominio}"></td>
-            <td><input class="vacio" type="text" name="" value="${(r.capacidad==undefined)?"-":r.capacidad}" id="cap${r.dominio}"></td>
-            <td><button class="btnDelVehiculo" dominio="${r.dominio}">Borrar</button>
-                <button class="btnUpdVehiculo" dominio="${r.dominio}">Actualizar</button>
-            </td>
+            <td><a href="./usado.html?dominio=${r.dominio}">${r.dominio}</a></td>
+            <td>${r.marca}</td>
+            <td>${r.modelo}</td>
+            <td>${r.año}</td>
+            <td>${r.precio}</td>
+            <td>${(r.capacidad==undefined)?"-":r.capacidad}</td>
+            <td>${(r.sede==undefined)?"-":r.sede}</td>
             </tr>
         `; 
     }
     document.querySelector("#tblVehiculos").innerHTML = html;
-    let btnBorrar = document.querySelectorAll('.btnDelVehiculo');
-    btnBorrar.forEach(bd => { bd.addEventListener('click', async () => {
-        let dominio = bd.getAttribute('dominio');
-        if (await aServidor(dominio,'D')) {
-            load();
-        }    
-    })})
-    let btnModificar = document.querySelectorAll('.btnUpdVehiculo');
-    btnModificar.forEach(bd => { bd.addEventListener('click', async () => {
-        let dominio = bd.getAttribute('dominio');
-        let renglon = {
-            "cantidad" : 1,
-            "vehiculos" : [
-                {
-                    "tipo" : `${(document.querySelector(`#cap${dominio}`).value=='-')?'Auto':'Camioneta'}`,
-                    "dominio" : dominio,
-                    "marca" : document.querySelector(`#mar${dominio}`).value,
-                    "modelo" : document.querySelector(`#mod${dominio}`).value,
-                    "año" : document.querySelector(`#año${dominio}`).value,
-                    "precio" : document.querySelector(`#pre${dominio}`).value,
-                    "capacidad" : document.querySelector(`#cap${dominio}`).value
-                }
-            ]
-        }
-        console.log(renglon);
-        if (await aServidor(renglon,'U')) {
-            load();
-        }    
-    })})
 }
 
 async function load(dominio) {

@@ -3,14 +3,20 @@ import * as FS from 'fs';
 import Red from './red';
 import Concesionaria from 'src/concesionaria/concesionaria';
 import { ConcesionariaService } from 'src/concesionaria/concesionaria.service';
+import UsadosLugar from 'src/vehiculos/usadosLugar';
+import { VehiculoService } from 'src/vehiculos/vehiculo.service';
+import Vehiculo from 'src/vehiculos/vehiculo';
+
 
 @Injectable()
 export class RedService {
     private redes : Red[] = [];
     private concesionariaService : ConcesionariaService;
+    private vehiculoService : VehiculoService;
 
     constructor() {
         this.concesionariaService = new ConcesionariaService();
+        this.vehiculoService = new VehiculoService();
         this.loadRedes();
     }
 
@@ -103,7 +109,75 @@ export class RedService {
             return error.message;            
         }
     }
-
+    //
+    public consultar(criterio : any) : UsadosLugar[] {
+        let vehiculo : Vehiculo;
+        let usados : UsadosLugar[] = [];
+        // AL INICIO TODOS LOS VEHICULOS DE LAS REDES CUMPLEN LOS CRITERIOS
+        let universo : UsadosLugar[] = this.armarUniverso();
+        // RECORRER CRITERIOS PARA ESTABLECER QUE VEHICULOS LOS CUMPLEN
+        for (let i = 0; i < criterio.filtros.length; i++) {
+            for (let v = 0; v < universo.length; v++) { 
+                vehiculo = this.vehiculoService.listarVehiculo(universo[v].getDominio());
+                switch (criterio.filtros[i].clave) {
+                    case 'tipo' : 
+                        if (vehiculo.getTipo() == criterio.filtros[i].valor)
+                            usados.push(universo[v]);
+                        break;                    
+                    case 'marca': 
+                        if (vehiculo.getMarca() == criterio.filtros[i].valor)
+                            usados.push(universo[v]);                    
+                        break;                    
+                    case 'modelo':  
+                        if (vehiculo.getModelo() == criterio.filtros[i].valor) 
+                            usados.push(universo[v]);
+                        break;                    
+                    case 'año' : {
+                        let valor = criterio.filtros[i].valor;
+                        if (valor.substring(0,1) == '+' && vehiculo.getAño() >= parseInt(valor.substring(1)))
+                            usados.push(universo[v]);
+                        else if (valor.substring(0,1) == '-' && vehiculo.getAño() <= parseInt(valor.substring(1)))
+                            usados.push(universo[v]);
+                        else if (vehiculo.getAño() == parseInt(valor))
+                            usados.push(universo[v]);
+                        }
+                        break;
+                    case 'precio' : {
+                        let valor = criterio.filtros[i].valor;
+                        if (valor.substring(0,1) == '+' && vehiculo.getPrecio() >= parseInt(valor.substring(1)))
+                            usados.push(universo[v]);
+                        else if (valor.substring(0,1) == '-' && vehiculo.getPrecio() <= parseInt(valor.substring(1)))
+                            usados.push(universo[v]);
+                        else if (vehiculo.getPrecio() == parseInt(valor))
+                            usados.push(universo[v]);
+                        }
+                        break;
+                    case 'lugar' :
+                        if (universo[v].getLugar() == criterio.filtros[i].valor) 
+                            usados.push(universo[v]);
+                        break;                    
+                }
+            }
+            // LUEGO DE CADA FILTRADO EL UNIVERSO SE REDEFINE COMO LOS ES LOS VEHICULOS QUE CUMPLIERON -> USADOS
+            universo = [];
+            usados.forEach(u => {
+                universo.push(u);
+            });
+            usados = [];
+        }
+        return universo;        
+    }
+    private armarUniverso() : UsadosLugar[] {
+        let universo : UsadosLugar[] = [];
+        this.redes.forEach(red => {
+            red.getConcesionarias().forEach(concesionaria => {
+                concesionaria.getVehiculos().forEach(vehiculo => {
+                    universo.push(new UsadosLugar(vehiculo.getDominio(),concesionaria.getSede()));
+                })
+            });
+        });
+        return universo;
+    }
     //
     private loadRedes() {
         try {

@@ -18,7 +18,7 @@ export default class Camioneta extends Vehiculo {
     }
     public guardar(): string {
         let datos : string;
-        datos = `${super.getDominio()},${super.getPrecio().toString()},${super.getMarca()},${super.getModelo()},${super.getAñO().toString()},${this.getCapacidad().toString()}`;
+        datos = `${super.getDominio()},${super.getPrecio().toString()},${super.getMarca()},${super.getModelo()},${super.getAño().toString()},${this.getCapacidad().toString()}`;
         return datos;
     }
 }

@@ -1,17 +1,14 @@
+let pTitulo = document.querySelector("#pTitulo");
 let pSubtitulo = document.querySelector("#pSubtitulo");
 let btnAgregar = document.querySelector("#btnAgregar");
 let btnBuscar = document.querySelector("#btnBuscar");
-let btnBuscaA = document.querySelector("#btnBuscaA");
-let btnBuscaC = document.querySelector("#btnBuscaC");
 
-pSubtitulo.innerHTML="Ejemplo Concesionaria";
-
-let vehiculos = [];
+let redes = [];
 load();
 
 btnAgregar.addEventListener("click", async () => {
     console.log("Función Agregar");
-    let dominio = document.querySelector('#dominio').value;
+    let sede = document.querySelector('#sede').value;
     let marca = document.querySelector('#marca').value;
     let modelo = document.querySelector('#modelo').value;
     let año = parseInt(document.querySelector('#año').value);
@@ -23,7 +20,7 @@ btnAgregar.addEventListener("click", async () => {
     }
     let renglon = {
         "cantidad" : 1,
-        "vehiculos" : [
+        "redes" : [
             {
                 "tipo" : tipo,
                 "dominio" : dominio,
@@ -65,55 +62,24 @@ btnBuscaC.addEventListener("click", () => {
 
 function mostrarVehiculos() {
     let html = "";
-    for (let r of vehiculos) {
+    for (let r of redes) {
         html += `
             <tr>
-            <td><a href="./ejemploVehiculo.html?dominio=${r.dominio}">${r.dominio}</a></td>
-            <td><input class="vacio" type="text" name="" value="${r.marca}" id="mar${r.dominio}"></td>
-            <td><input class="vacio" type="text" name="" value="${r.modelo}" id="mod${r.dominio}"></td>
-            <td><input class="vacio" type="text" name="" value="${r.año}" id="año${r.dominio}"></td>
-            <td><input class="vacio" type="text" name="" value="${r.precio}" id="pre${r.dominio}"></td>
-            <td><input class="vacio" type="text" name="" value="${(r.capacidad==undefined)?"-":r.capacidad}" id="cap${r.dominio}"></td>
-            <td><button class="btnDelVehiculo" dominio="${r.dominio}">Borrar</button>
-                <button class="btnUpdVehiculo" dominio="${r.dominio}">Actualizar</button>
-            </td>
+            <td><a href="./usado.html?dominio=${r.dominio}">${r.dominio}</a></td>
+            <td>${r.marca}</td>
+            <td>${r.modelo}</td>
+            <td>${r.año}</td>
+            <td>${r.precio}</td>
+            <td>${(r.capacidad==undefined)?"-":r.capacidad}</td>
+            <td>${(r.sede==undefined)?"-":r.sede}</td>
             </tr>
         `; 
     }
     document.querySelector("#tblVehiculos").innerHTML = html;
-    let btnBorrar = document.querySelectorAll('.btnDelVehiculo');
-    btnBorrar.forEach(bd => { bd.addEventListener('click', async () => {
-        let dominio = bd.getAttribute('dominio');
-        if (await aServidor(dominio,'D')) {
-            load();
-        }    
-    })})
-    let btnModificar = document.querySelectorAll('.btnUpdVehiculo');
-    btnModificar.forEach(bd => { bd.addEventListener('click', async () => {
-        let dominio = bd.getAttribute('dominio');
-        let renglon = {
-            "cantidad" : 1,
-            "vehiculos" : [
-                {
-                    "tipo" : `${(document.querySelector(`#cap${dominio}`).value=='-')?'Auto':'Camioneta'}`,
-                    "dominio" : dominio,
-                    "marca" : document.querySelector(`#mar${dominio}`).value,
-                    "modelo" : document.querySelector(`#mod${dominio}`).value,
-                    "año" : document.querySelector(`#año${dominio}`).value,
-                    "precio" : document.querySelector(`#pre${dominio}`).value,
-                    "capacidad" : document.querySelector(`#cap${dominio}`).value
-                }
-            ]
-        }
-        console.log(renglon);
-        if (await aServidor(renglon,'U')) {
-            load();
-        }    
-    })})
 }
 
 async function load(dominio) {
-    vehiculos = [];
+    redes = [];
     let url = "";
     switch (dominio) {
         case 'A': {
@@ -137,9 +103,9 @@ async function load(dominio) {
     let respuesta = await fetch(url);
     if (respuesta.ok) {
         if (dominio) 
-            vehiculos.push(await respuesta.json());
+            redes.push(await respuesta.json());
         else
-            vehiculos = await respuesta.json();
+            redes = await respuesta.json();
     }
     mostrarVehiculos()
 }
@@ -162,7 +128,7 @@ async function aServidor(datos, accion) {
             break;         
         }
         case 'U': {     //ACTUALIZACION
-            respuesta = await fetch(`/vehiculo/${datos.vehiculos[0].dominio}`, {
+            respuesta = await fetch(`/vehiculo/${datos.redes[0].dominio}`, {
                 method : 'PUT',
                 headers : { 'Content-type' : 'application/json' },
                 body : JSON.stringify(datos)

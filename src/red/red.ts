@@ -52,7 +52,7 @@ export default class Red {
     public guardar() : string {
         let concesionarias : string = '';
         for (let i = 0; i < this.concesionarias.length; i++) 
-            concesionarias += `${i==0?'':'-'}${this.concesionarias[i].getSede()}-`;
+            concesionarias += `${i==0?'':'-'}${this.concesionarias[i].getSede()}`;
         return `${this.nombre},${this.url},${concesionarias}`;
     }
 }

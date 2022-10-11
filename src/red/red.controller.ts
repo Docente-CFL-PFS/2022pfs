@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import UsadosLugar from 'src/vehiculos/usadosLugar';
 import Red from './red';
 import { RedService } from './red.service';
 
@@ -6,11 +7,17 @@ import { RedService } from './red.service';
 export class RedController {
 
     constructor(private redService : RedService) {}
-
+    
     @Get()
     public listRedes() : Red[] {
         return this.redService.listRedes();
     }
+    //
+    @Get('/consulta')
+    public consultarRed(@Body() criterio : any) : UsadosLugar[] {
+        return this.redService.consultar(criterio);
+    }
+    //
     @Get(':sede')
     public listRed(@Param('sede') sede : string) : Red {
         return this.redService.listRed(sede);
@@ -27,5 +34,5 @@ export class RedController {
     public updRed(@Body() datos : any) : string {
         return this.redService.updRed(datos);
     }
-
+    
 }
