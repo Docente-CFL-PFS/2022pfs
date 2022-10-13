@@ -152,10 +152,16 @@ export class RedService {
                             usados.push(universo[v]);
                         }
                         break;
+                    case 'kilometros' : {
+
+                        }
+                        break;
                     case 'lugar' :
                         if (universo[v].getLugar() == criterio.filtros[i].valor) 
-                            usados.push(universo[v]);
-                        break;                    
+                                usados.push(universo[v]);
+                            break;
+                    case 'flete0' :
+                        break;
                 }
             }
             // LUEGO DE CADA FILTRADO EL UNIVERSO SE REDEFINE COMO LOS ES LOS VEHICULOS QUE CUMPLIERON -> USADOS

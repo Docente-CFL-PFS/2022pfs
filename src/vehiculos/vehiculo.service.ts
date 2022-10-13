@@ -52,9 +52,9 @@ export class VehiculoService {
             for (let i = 0; i < cantidad; i++) {
                 let elemento = datos.vehiculos[i];
                 if (elemento.tipo == 'Auto')
-                    vehiculo = new Auto(elemento.dominio, elemento.precio, elemento.marca, elemento.modelo, elemento.año);
+                    vehiculo = new Auto(elemento.dominio, elemento.precio, elemento.marca, elemento.modelo, elemento.año, elemento.km);
                 else if (elemento.tipo == 'Camioneta')
-                        vehiculo = new Camioneta(elemento.dominio, elemento.precio, elemento.marca, elemento.modelo, elemento.año, elemento.capacidad);
+                        vehiculo = new Camioneta(elemento.dominio, elemento.precio, elemento.marca, elemento.modelo, elemento.año, elemento.km, elemento.capacidad);
                 else
                     throw new Error('Tipo de vehiculo no valido');
                 this.vehiculos.push(vehiculo)                
@@ -91,9 +91,9 @@ export class VehiculoService {
                     for (let j = 0; j < cantidad; j++) {
                         let elemento = datos.vehiculos[j];
                         if (elemento.tipo == 'Auto')
-                            vehiculo = new Auto(elemento.dominio, elemento.precio, elemento.marca, elemento.modelo, elemento.año);
+                            vehiculo = new Auto(elemento.dominio, elemento.precio, elemento.marca, elemento.modelo, elemento.año, elemento.km);
                         else if (elemento.tipo == 'Camioneta')
-                                vehiculo = new Camioneta(elemento.dominio, elemento.precio, elemento.marca, elemento.modelo, elemento.año, elemento.capacidad);
+                                vehiculo = new Camioneta(elemento.dominio, elemento.precio, elemento.marca, elemento.modelo, elemento.año, elemento.km, elemento.capacidad);
                         else
                             throw new Error('Tipo de vehiculo no valido');
                     }
@@ -118,10 +118,10 @@ export class VehiculoService {
             let registros = texto.split('\n');
             for (let i = 0; i < registros.length; i++) {
                 let registro = registros[i].split(',');
-                if (registro.length == 5)
-                    vehiculo = new Auto(registro[0], parseInt(registro[1]), registro[2], registro[3], parseInt(registro[4]));
+                if (registro.length == 6)
+                    vehiculo = new Auto(registro[0], parseInt(registro[1]), registro[2], registro[3], parseInt(registro[4]), parseInt(registro[5]));
                 else
-                    vehiculo = new Camioneta(registro[0], parseInt(registro[1]), registro[2], registro[3], parseInt(registro[4]), parseInt(registro[5]));
+                    vehiculo = new Camioneta(registro[0], parseInt(registro[1]), registro[2], registro[3], parseInt(registro[4]), parseInt(registro[5]), parseInt(registro[6]));
                 this.vehiculos.push(vehiculo);
             }
         }        

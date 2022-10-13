@@ -4,14 +4,16 @@ export default abstract class Vehiculo {
     protected modelo: string;
     protected año: number;
     protected precio: number;
+    protected kilometraje: number;    
     protected tipo: string;
 
-    constructor(dominio: string, precio: number, marca: string, modelo: string, año: number, tipo: string) {
+    constructor(dominio: string, precio: number, marca: string, modelo: string, año: number, km: number, tipo: string) {
         this.dominio=dominio;
         this.precio=precio;
         this.marca=marca;
         this.modelo=modelo;
         this.año=año;
+        this.kilometraje=km;
         this.tipo=tipo;
     }
 
@@ -29,6 +31,9 @@ export default abstract class Vehiculo {
 
     public getAño(): number { return this.año; }
     public setAño(año: number): void { this.año = año; }
+
+    public getKilometraje(): number { return this.kilometraje; }
+    public setKilometraje(km: number): void { this.kilometraje = km; }
 
     abstract getTipo(): string;
     abstract mostrar(): string;

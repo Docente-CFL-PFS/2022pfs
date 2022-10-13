@@ -33,7 +33,7 @@ export class ConcesionariaService {
                         if (this.concesionarias[i].getSede()==datos.sede) 
                             throw new Error('La concesionaria ya se encuentra.')
                     }                    
-                    concesionaria = new Concesionaria(datos.sede, datos.domicilio);
+                    concesionaria = new Concesionaria(datos.sede, datos.domicilio, datos.envioGratuito);
                     if (datos.vehiculos) {
                         datos.vehiculos.forEach(dato => {
                             let vehiculo : Vehiculo = this.vehiculoService.listarVehiculo(dato.dominio);
@@ -81,7 +81,7 @@ export class ConcesionariaService {
                 if (datos.sede && datos.domicilio) {
                     for (let i = 0; i < this.concesionarias.length; i++) 
                         if (this.concesionarias[i].getSede()==datos.sede) {
-                            concesionaria = new Concesionaria(datos.sede, datos.domicilio);                             
+                            concesionaria = new Concesionaria(datos.sede, datos.domicilio, datos.envioGratuito);                             
                             if (datos.vehiculos) {
                                 datos.vehiculos.forEach(dato => {
                                     let vehiculo : Vehiculo = this.vehiculoService.listarVehiculo(dato.dominio);
@@ -108,14 +108,16 @@ export class ConcesionariaService {
     private loadConcesionarias() {
         try {
             let concesionaria : Concesionaria;
+            let envioGratuito : boolean;
             let texto : string = FS.readFileSync('.\\datos\\concesionariasMock.txt', 'utf8');
             if (texto) {
                 this.concesionarias=[];
                 let registros = texto.split('\n');                
                 for (let i = 0; i < registros.length; i++) {
                     let registro = registros[i].replace('\r','').split(',');
-                    concesionaria = new Concesionaria(registro[0], registro[1]);
-                    let vehiculos = registro[2].split('-');
+                    envioGratuito= (parseInt(registro[2]) == 1);
+                    concesionaria = new Concesionaria(registro[0], registro[1], envioGratuito);
+                    let vehiculos = registro[3].split('-');
                     for (let j = 0; j < vehiculos.length; j++) {
                         let vehiculo = this.vehiculoService.listarVehiculo(vehiculos[j]);
                         concesionaria.addVehiculo(vehiculo);                        
