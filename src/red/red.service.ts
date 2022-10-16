@@ -34,12 +34,12 @@ export class RedService {
         try {
             let red : Red;
             if (datos)
-                if (datos.nombre && datos.url) {
+                if (datos.nombre && datos.url && datos.financiacion) {
                     for (let i = 0; i < this.redes.length; i++) {
                         if (this.redes[i].getNombre()==datos.nombre) 
                             throw new Error('La red ya se encuentra.')
                     }                    
-                    red = new Red(datos.nombre, datos.url);
+                    red = new Red(datos.nombre, datos.url, datos.financiacion);
                     if (datos.concesionarias) {
                         datos.concesionarias.forEach(dato => {
                             let concesionaria : Concesionaria = this.concesionariaService.listConcesionaria(dato.sede);
@@ -84,10 +84,10 @@ export class RedService {
         try {
             let red : Red;
             if (datos)
-                if (datos.nombre && datos.url) {
+                if (datos.nombre && datos.url && datos.financiacion) {
                     for (let i = 0; i < this.redes.length; i++) 
                         if (this.redes[i].getNombre()==datos.nombre) {
-                            red = new Red(datos.nombre, datos.url);                             
+                            red = new Red(datos.nombre, datos.url, datos.financiacion);                             
                             if (datos.concesionarias) {
                                 datos.concesionarias.forEach(dato => {
                                     let concesionaria : Concesionaria = this.concesionariaService.listConcesionaria(dato.sede);
@@ -110,15 +110,20 @@ export class RedService {
         }
     }
     //
-    public consultar(criterio : any) : UsadosLugar[] {
+    public consultar(criterio : any) : UsadosLugar[] {        
+        let red : Red;
+        let concesionaria : Concesionaria;
         let vehiculo : Vehiculo;
+
         let usados : UsadosLugar[] = [];
         // AL INICIO TODOS LOS VEHICULOS DE LAS REDES CUMPLEN LOS CRITERIOS
         let universo : UsadosLugar[] = this.armarUniverso();
         // RECORRER CRITERIOS PARA ESTABLECER QUE VEHICULOS LOS CUMPLEN
         for (let i = 0; i < criterio.filtros.length; i++) {
             for (let v = 0; v < universo.length; v++) { 
-                vehiculo = this.vehiculoService.listarVehiculo(universo[v].getDominio());
+                vehiculo = this.vehiculoService.listarVehiculo(universo[v].getPatente());
+                concesionaria = this.concesionariaService.listConcesionaria(universo[v].getLugar());
+                red = this.listRed(universo[v].getEmpresa());
                 switch (criterio.filtros[i].clave) {
                     case 'tipo' : 
                         if (vehiculo.getTipo() == criterio.filtros[i].valor)
@@ -153,14 +158,32 @@ export class RedService {
                         }
                         break;
                     case 'kilometros' : {
-
+                        let valor = criterio.filtros[i].valor;
+                        if (valor.substring(0,1) == '+' && vehiculo.getKilometraje() >= parseInt(valor.substring(1)))
+                            usados.push(universo[v]);
+                        else if (valor.substring(0,1) == '-' && vehiculo.getKilometraje() <= parseInt(valor.substring(1)))
+                            usados.push(universo[v]);
+                        else if (vehiculo.getKilometraje() == parseInt(valor))
+                            usados.push(universo[v]);
                         }
                         break;
                     case 'lugar' :
-                        if (universo[v].getLugar() == criterio.filtros[i].valor) 
-                                usados.push(universo[v]);
-                            break;
+                        if (concesionaria.getSede() == criterio.filtros[i].valor) 
+                            usados.push(universo[v]);
+                        break;
                     case 'flete0' :
+                        if (concesionaria.isEnvioGratuito() == criterio.filtros[i].valor) 
+                            usados.push(universo[v]);
+                        break;
+                    case 'cuotas' : {
+                        let valor = criterio.filtros[i].valor;
+                        if (valor.substring(0,1) == '+' && red.getFinanciacion() >= parseInt(valor.substring(1)))
+                            usados.push(universo[v]);
+                        else if (valor.substring(0,1) == '-' && red.getFinanciacion() <= parseInt(valor.substring(1)))
+                            usados.push(universo[v]);
+                        else if (red.getFinanciacion() == parseInt(valor))
+                            usados.push(universo[v]);
+                        }
                         break;
                 }
             }
@@ -178,7 +201,7 @@ export class RedService {
         this.redes.forEach(red => {
             red.getConcesionarias().forEach(concesionaria => {
                 concesionaria.getVehiculos().forEach(vehiculo => {
-                    universo.push(new UsadosLugar(vehiculo.getDominio(),concesionaria.getSede()));
+                    universo.push(new UsadosLugar(vehiculo.getDominio(),concesionaria.getSede(),red.getNombre()));
                 })
             });
         });
@@ -194,8 +217,8 @@ export class RedService {
                 let registros = texto.split('\n');
                 for (let i = 0; i < registros.length; i++) {
                     let registro = registros[i].replace('\r','').split(',');
-                    red = new Red(registro[0], registro[1]);
-                    let concesionarias = registro[2].split('-');
+                    red = new Red(registro[0], registro[1], parseInt(registro[2]));
+                    let concesionarias = registro[3].split('-');
                     for (let j = 0; j < concesionarias.length; j++) {
                         let concesionaria = this.concesionariaService.listConcesionaria(concesionarias[j]);
                         red.addConcesionaria(concesionaria);                        

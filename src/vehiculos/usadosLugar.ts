@@ -1,14 +1,17 @@
 import Vehiculo from "./vehiculo";
 
 export default class UsadosLugar {
-    private dominio : string;
-    private lugar : string;    
+    private patente : string;
+    private lugar : string;
+    private empresa : string;
 
-    constructor(dominio: string, lugar : string) {
-        this.dominio = dominio;
-        this.lugar=lugar;        
+    constructor(patente: string, lugar : string, empresa : string) {
+        this.patente = patente;
+        this.lugar=lugar;  
+        this.empresa=empresa;    
     }
-
-    public getDominio(): string { return this.dominio; }
+    
+    public getPatente(): string { return this.patente; }
     public getLugar(): string { return this.lugar; }
+    public getEmpresa(): string { return this.empresa; }
 }

@@ -3,11 +3,13 @@ import Concesionaria from "src/concesionaria/concesionaria";
 export default class Red {
     private nombre : string;
     private url : string;
+    private financiacion : number;
     private concesionarias : Concesionaria[] = [];
     
-    constructor(nombre : string, url : string) {
+    constructor(nombre : string, url : string, cuotas : number) {
         this.nombre=nombre;
         this.url=url;
+        this.financiacion=cuotas;
     }
     
     public getNombre(): string { return this.nombre; }
@@ -15,6 +17,9 @@ export default class Red {
     
     public getUrl(): string { return this.url; }
     public setUrl(url: string): void { this.url = url; }
+    
+    public getFinanciacion(): number { return this.financiacion; }
+    public setFinanciacion(financiacion: number): void { this.financiacion = financiacion; }
     
     public getConcesionarias(): Concesionaria[] { return this.concesionarias; }
     public addConcesionaria(concesionaria : Concesionaria) : string {
@@ -53,6 +58,6 @@ export default class Red {
         let concesionarias : string = '';
         for (let i = 0; i < this.concesionarias.length; i++) 
             concesionarias += `${i==0?'':'-'}${this.concesionarias[i].getSede()}`;
-        return `${this.nombre},${this.url},${concesionarias}`;
+        return `${this.nombre},${this.url},${this.financiacion},${concesionarias}`;
     }
 }

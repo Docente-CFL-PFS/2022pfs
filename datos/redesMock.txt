@@ -1,1 +1,2 @@
-UsadosBonaerenses,www.usados-bonaerenses.com,UsadosTresArroyos-UsadosBenitoJuarez-UsadosTandil
+UsadosBonaerenses,www.usados-bonaerenses.com,20,UsadosTresArroyos-UsadosBenitoJuarez-UsadosTandil
+UsadosPampeanos,www.usados-pampeanos.com,30,UsadosHumeda-UsadosSeca
